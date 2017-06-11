@@ -5,7 +5,6 @@
 - Docker Hub
 - Github and Docker Hub
 - Docker Compose
-- Swarm
 
 ---
 
