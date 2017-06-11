@@ -9,32 +9,13 @@
 
 ---
 
-# Briefly: setup
+Open a webbrowser to:
 
-````
-curl http://docker-presentor.meinit.nl:8000/keys/docker-workshop-ssh-key/docker-workshop-ssh-key
-chmod 600 docker-workshop-ssh-key
-ssh -i docker-workshop-ssh-key root@docker-${yourname}.meinit.nl
-````
+https://katacoda.com/robertdebock
 
-````
-yum -y install docker
-systemctl start docker
-````
+Open "Sweat & Tears with Docker"
 
 ---
-
-# Variables
-
-
-````
-docker run -e "variable=value" -ti alpine /bin/sh
-/ # echo "${variable}"
-value
-/ # exit
-````
-
-----
 
 # Use Variables to
 
@@ -45,16 +26,6 @@ docker run -e MYSQL_ROOT_PASSWORD=my-secret-pw mysql
 ````
 
 ---
-
-# Volumes
-
-````
-docker run -v $(pwd):/data alpine touch /data/iets.txt
-docker run -v $(pwd):/data alpine ls -l /data/iets.txt
-iets.txt
-````
-
-----
 
 # Use Volumes to
 
@@ -77,39 +48,37 @@ Docker is not a good match for dataservices such as:
 
 # Network
 
-| Container 1 | Container 2|
-|---|---|
-|`docker run -ti alpine /bin/sh`|`docker run -ti alpine /bin/sh`|
-|`ifconfig`|`ifconfig`|
-|`ping 172.17.0.3`|`ping 172.17.0.2`|
-|CTRL+C|    |
-|`exit`|    |
+Containers can communicate with each other.
+
+Containers can also be isolated to a specific network.
+
+Some containers have no network at all.
 
 ----
 
-# More complex
+# Exposing ports
+
+Dockerfiles contain an EXPOSE parameter:
 
 ````
-docker run -ti --name first-container alpine /bin/sh
-````
+FROM httpd
 
+EXPOSE 80 443
 ````
-docker run -ti --name second-container alpine /bin/sh
-````
-
-````
-docker network create simple-network
-docker network connect simple-network first-container
-docker network connect simple-network second-container
-````
-
-Try `ifconfig` and `ping first-container` or `ping second-container`.
 
 ----
 
-# How to use
+# Publishing ports
 
-To link containers like nginx -> tomcat -> mysql.
+When running an image, you can "publish" ports. This opens TCP or UDP ports to a container.
+
+````
+docker run -p 8080:80 nginx
+````
+
+````
+docker run -P nginx
+````
 
 ---
 
@@ -138,7 +107,7 @@ services:
 
 # I love compose!
 
-It gets rather complex. Even with one container.
+Even one container can become quite complex.
 - build details
 - naming
 - tcp/udp ports
@@ -172,28 +141,6 @@ Don't forget to look on Docker Hub for great (and less great) examples.
 It's extremely easy to automatically build images:
 1. Make a GitHub or BitBucket repository with a Dockerfile in it.
 2. On Docker Hub: Create -> Create Automatic Build.
-
----
-
-# Swarm
-
-````
-docker swarm init --advertise-addr 1.2.3.4
-````
-
-````
-docker swarm join --token $TOKEN
-````
-
-````
-docker service create --replicas 3 httpd
-````
-
-----
-
-# Why
-
-To run containers over multiple machines.
 
 ---
 

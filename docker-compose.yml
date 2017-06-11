@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+   nginx:
+     image: nginx
+     volumes:
+       - ./nginx:/etc/nginx/conf.d:ro
+     ports:
+      - 8000:80
+   revealmd:
+     image: robertdebock/docker-revealmd
+     volumes:
+       - ./content:/usr/src/app:ro
